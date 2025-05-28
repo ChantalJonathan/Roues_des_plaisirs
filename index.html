@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Triple roue du plaisir</title>
+  <style>
+    body {
+      background: #222;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .wrapper {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .wheel-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    canvas {
+      background: #111;
+      border-radius: 50%;
+    }
+
+    .pointer {
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 30px solid red;
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
+      z-index: 2;
+    }
+
+    .section {
+      margin-bottom: 50px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 25px;
+      font-size: 16px;
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .result {
+      margin-top: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<h1>🎯 Triple Roue du Plaisir 🎯</h1>
+
+<div class="wrapper">
+
+  <!-- Roue 1 -->
+  <div class="section">
+    <h2>🎡 Tenue Sexy</h2>
+    <div class="wheel-container">
+      <div class="pointer"></div>
+      <canvas id="wheel1" width="300" height="300"></canvas>
+    </div>
+    <br>
+    <button onclick="spin('wheel1', options1, 'result1')">Tourner</button>
+    <div id="result1" class="result"></div>
+  </div>
+
+  <!-- Roue 2 -->
+  <div class="section">
+    <h2>🎡 Accéssoires</h2>
+    <div class="wheel-container">
+      <div class="pointer"></div>
+      <canvas id="wheel2" width="300" height="300"></canvas>
+    </div>
+    <br>
+    <button onclick="spin('wheel2', options2, 'result2')">Tourner</button>
+    <div id="result2" class="result"></div>
+  </div>
+
+  <!-- Roue 3 -->
+  <div class="section">
+    <h2>🎡 Rapport</h2>
+    <div class="wheel-container">
+      <div class="pointer"></div>
+      <canvas id="wheel3" width="300" height="300"></canvas>
+    </div>
+    <br>
+    <button onclick="spin('wheel3', options3, 'result3')">Tourner</button>
+    <div id="result3" class="result"></div>
+  </div>
+
+</div>
+
+<script>
+  const options1 = ["Body String", "Body Bleu ouvert", "Body 1", "Body 2", "Body 3", "Body 4", "Body 5", "Body 6"];
+  const options2 = ["Plug bijoux", "Plug noir", "Plug rose", "Plug gonflable", "Vibro. Connecté", "Vibro. Simple", "Gode double", "Ventouse", "Crochet"];
+  const options3 = ["Anal", "Vaginal", "Double"];
+
+function drawWheel(canvasId, options, rotation = 0) {
+  const canvas = document.getElementById(canvasId);
+  const ctx = canvas.getContext('2d');
+  const center = canvas.width / 2;
+  const arc = 2 * Math.PI / options.length;
+
+  const colors = ["#ffc107", "#03a9f4", "#e91e63"]; // 3 couleurs
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < options.length; i++) {
+    const angle = (rotation - Math.PI / 2) + i * arc;
+    ctx.beginPath();
+    ctx.fillStyle = colors[i % colors.length]; // alternance 3 couleurs
+    ctx.moveTo(center, center);
+    ctx.arc(center, center, center - 5, angle, angle + arc);
+    ctx.fill();
+
+    ctx.save();
+    ctx.translate(center, center);
+    ctx.rotate(angle + arc / 2);
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#000";
+    ctx.font = "bold 14px sans-serif";
+    ctx.fillText(options[i], 85, 5);
+    ctx.restore();
+  }
+}
+
+
+  // Initialiser toutes les roues
+  drawWheel("wheel1", options1);
+  drawWheel("wheel2", options2);
+  drawWheel("wheel3", options3);
+
+  function spin(canvasId, options, resultId) {
+    const canvas = document.getElementById(canvasId);
+    const ctx = canvas.getContext('2d');
+    const center = canvas.width / 2;
+    let rotation = 0;
+    const arc = 360 / options.length;
+    const spinAngle = Math.random() * 360 + 720;
+    const duration = 4000;
+    const start = Date.now();
+
+    function animate() {
+      const now = Date.now();
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      rotation = (spinAngle * easeOut) % 360;
+
+      drawWheel(canvasId, options, rotation * Math.PI / 180);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        const angle = (360 - (rotation % 360) + 0) % 360;
+        const index = Math.floor(angle / arc);
+        document.getElementById(resultId).textContent = "🎉 Tiré : " + options[index];
+      }
+    }
+
+    animate();
+  }
+</script>
+
+</body>
+</html>
