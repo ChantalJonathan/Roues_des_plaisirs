@@ -136,8 +136,8 @@ function drawWheel(canvasId, options, rotation = 0) {
     ctx.rotate(angle + arc / 2);
     ctx.textAlign = "center";
     ctx.fillStyle = "#000";
-    ctx.font = "bold 14px sans-serif";
-    ctx.fillText(options[i], 85, 5);
+    ctx.font = "bold 22px sans-serif";
+    ctx.fillText(options[i], 130, 5);
     ctx.restore();
   }
 }
@@ -155,7 +155,7 @@ function drawWheel(canvasId, options, rotation = 0) {
     let rotation = 0;
     const arc = 360 / options.length;
     const spinAngle = Math.random() * 360 + 720;
-    const duration = 4000;
+    const duration = 5000;
     const start = Date.now();
 
     function animate() {
