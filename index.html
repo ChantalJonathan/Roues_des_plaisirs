@@ -59,7 +59,7 @@
 
     .result {
       margin-top: 10px;
-      font-size: 18px;
+      font-size: 30px;
       font-weight: bold;
     }
   </style>
@@ -172,7 +172,7 @@ function drawWheel(canvasId, options, rotation = 0) {
       } else {
         const angle = (360 - (rotation % 360) + 0) % 360;
         const index = Math.floor(angle / arc);
-        document.getElementById(resultId).textContent = "🎉 Tiré : " + options[index];
+        document.getElementById(resultId).textContent = "🎉 Résultat : " + options[index];
       }
     }
 
